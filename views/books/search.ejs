@@ -1,35 +1,21 @@
 <div class="row my-5">
   <div class="col">
     <h1 class="text-center">도서 검색</h1>
+    <div id="div_books"></div>
   </div>
 </div>
-<script type="x-handlebars-templte" id="temp_books">
+<script type="x-handlebars-template" id="temp_books">
   <table class="table">
       {{#each documents}}
       <tr>
-          <td><img src="{{thumbnail thumbnail}}" index="{{@index}}" width="50"></td>
+          <td><img src="{{thumbnail}}"  width="50"></td>
           <td>{{title}}</td>
-          <td>{{price price}}</td>
+          <td>{{price}}</td>
           <td>{{authors}}</td>
       </tr>
 
       {{/each}}
   </table>
-</script>
-
-<script>
-  Handlebars.registerHelper("thumbnail", function (thumbnail) {
-    if (!thumbnail) {
-      return "http://via.placeholder.com/120x150";
-    } else {
-      return thumbnail;
-    }
-  });
-
-  Handlebars.registerHelper("price", function (price) {
-    if (price)
-      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원";
-  });
 </script>
 
 <script>
@@ -41,32 +27,11 @@
       type: "get",
       url: "https://dapi.kakao.com/v3/search/book",
       headers: { Authorization: `KakaoAK 1516d2c502f56b88f702da4d62d772a5` },
-      data: { query: "노드", page: 1, size: 5 },
+      data: { query: "자바", page: 1, size: 5 },
       success: function (data) {
         console.log(data);
-        temp = Handlebars.compile($("#temp_books").html());
+        let temp = Handlebars.compile($("#temp_books").html());
         $("#div_books").html(temp(data));
-        $("#span_page").html(page);
-        if (page == 1) {
-          $("#prev").attr("disabled", true);
-        } else {
-          $("#prev").attr("disabled", false);
-        }
-        if (data.meta.is_end) {
-          $("#next").attr("disabled", true);
-        } else {
-          $("#next").attr("disabled", false);
-        }
-        let last = Math.ceil(data.meta.pageable_count / 5);
-        if (data.meta.pageable_count > 0) {
-          $("#div_page").show();
-          $("#span_page").html(page + "/" + last);
-        } else {
-          $("#div_page").hide();
-          $("#div_books").html(
-            `<h1 class='text-center'>'${query}' 도서가 존재하지 않습니다.</h1>`
-          );
-        }
       },
     });
   }

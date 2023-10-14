@@ -42,7 +42,7 @@
         <div class="card-footer">
 
             {{fmtPrice price}}
-            <i class="bi bi-cart float-end" book="{{book @this}}"></i>
+            <i class="cart bi bi-cart float-end" book="{{book @this}}"></i>
 
         </div>
       </div>
@@ -82,6 +82,10 @@
     // 폼의 쿼리인풋박스안의 value값을 query 변수에 저장
     let query=$(frm.query).val();
     let page=1;
+
+
+ 
+
     // 장바구니 아이콘을 클릭 했을 때
     $("#div_books").on("click", ".bi-cart", async function(){
         const book= JSON.parse($(this).attr("book"));
@@ -94,9 +98,9 @@
             if(snapshot.val()){
                 alert("장바구니에 이미 존재하는 도서입니다!");
             } else{
-                if(!confirm("장바구니에 저장하실래요?")) return;
+                if(!confirm("장바구니에 해당 도서 넣으실래요?")) return;
                 await set(ref_book, book);
-                alert("장바구니에 등록되었습니다.");
+                alert("해당 도서가 저장되었습니다.");
             }
         }else{
             location.href="/users/login";

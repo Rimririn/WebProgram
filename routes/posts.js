@@ -21,4 +21,14 @@ router.get("/read", function (req, res) {
   });
 });
 
+//게시글수정
+router.get("/update/:id", function (req, res) {
+  const id = req.params.id;
+  res.render("index", {
+    title: "게시글수정",
+    pageName: "posts/update.ejs",
+    id,
+  });
+});
+
 module.exports = router;
